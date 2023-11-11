@@ -1,0 +1,16 @@
+Query:  $this->db->table("posts")->where("category", "=", 'test'")->get_all();
+SQL Result: SELECT * FROM posts WHERE category = 'test'
+
+Some query function:
+1. where: $this->db->where(field, compare, value)
+2. orwhere: $this->db->orwhere(field, compare, value)
+3. get_all: $this->db->get_all()
+4. first: $this->db->first()
+5. join: $this->db->join(table_name, condition)
+6. limit: $this->db->limit(number, offset)
+7. table: $this->db->table(name)
+8. insert: $this->db->table(table_name)->insert(data)
+9. update: $this->db->table(table_name)->where(field, compare, value)->update(data)
+10. delete: $this->db->table(table_name)->where(field, compare, value)->delete()
+11. where_like: $this->db->where_like(field, value)
+12. select: $this->db->table->select(field)
