@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Course Payment</title>
+    <!-- Include Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <!-- Course Information -->
+        <div class="col-md-6">
+          <h2>Course Name</h2>
+          <p>Author: Course Author</p>
+          <p>Fee: Course Fee</p>
+        </div>
+        <!-- Payment Form -->
+        <div class="col-md-6">
+          <h2>Payment Details</h2>
+          <form>
+            <div class="form-group">
+              <label for="cardName">Name on Card</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cardName"
+                placeholder="Card Name"
+              />
+            </div>
+            <div class="form-group">
+              <label for="cardNumber">Card Number</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cardNumber"
+                placeholder="Card Number"
+              />
+            </div>
+            <div class="form-group">
+              <label for="expiryDate">Expiry Date</label>
+              <input
+                type="text"
+                class="form-control"
+                id="expiryDate"
+                placeholder="MM/YY"
+              />
+            </div>
+            <div class="form-group">
+              <label for="cvv">CVV</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cvv"
+                placeholder="CVV"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Include Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

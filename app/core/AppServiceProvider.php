@@ -29,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
                 if ($user == hash('sha256', $value['user_id'])) {
                     View::share('user_name', $user_model->get_user_name($value['user_id']));
                     View::share('user_avt', $user_model->get_user_avatar($value['user_id']));
+                    View::share('user_status', $user_model->get_user_status($value['user_id']));
                     break;
                 }
             }

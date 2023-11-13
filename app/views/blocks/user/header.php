@@ -12,9 +12,14 @@ $user = View::get_data_share('user_name');
 
 $user_avt = View::get_data_share('user_avt');
 
-@endphp
+$user_status = View::get_data_share('user_status');
 
-<header class="header_area">
+
+@endphp
+@if (strtoupper($user_status) == strtoupper("deactive"))
+<div class="alert alert-warning" style="margin-bottom: 0 !important;">Your account is set to <b>deactive</b> because you haven't validate your email before! Click <a href="{{ route_url('user.auth.validate_email') }}">here</a> to validate your email and active your account!</div>
+@endif
+<header class="header_area {{ empty($data['home']) ? 'white-header' : false }}">
     <div class="main_menu">
         <div class="search_input" id="search_input_box">
             <div class="container">

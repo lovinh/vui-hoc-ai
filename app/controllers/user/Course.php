@@ -51,7 +51,7 @@ class Course extends BaseController
         $course_name = urldecode($this->request->get_fields_data()['search_input']);
         $data = [
             'page-title' => "Vui Hoc AI - Search Course " . $course_name,
-            'course_result_title' => "All courses match '". $course_name. "'",
+            'course_result_title' => "All courses match '" . $course_name . "'",
             'view' => 'user/course',
             'courses' => $course_model->get_courses_by_search($course_name),
             'model' => $course_model
@@ -66,9 +66,7 @@ class Course extends BaseController
          */
         $course_model = load_model('user\CourseModel');
 
-        if ($course_model->is_have_course($id))
-        {
-
+        if ($course_model->is_have_course($id)) {
         }
 
         $course_detail = [

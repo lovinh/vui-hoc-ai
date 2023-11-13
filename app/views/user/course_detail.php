@@ -92,8 +92,8 @@ $rate_status = $n_stars > 3 ? "Recommend" : "Not Recommend";
                         </div>
                     </li>
                 </ul>
-                @if (strtoupper($model['status']) == strtoupper("AVAILABLE"))
-                <a href="#" class="primary-btn2 text-uppercase enroll rounded-0 text-white">Enroll the course</a>
+                @if (strtoupper($model['status']) == strtoupper("available"))
+                <a href="{{ route_url('user.enroll.index', ['id' => $model['id']]) }}" class="primary-btn2 text-uppercase enroll rounded-0 text-white">Enroll the course</a>
                 @else
                 <a href="#" class="primary-btn2 text-uppercase enroll rounded-0 text-white unavailable">Course Unavailable</a>
                 @endif

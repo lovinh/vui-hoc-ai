@@ -66,7 +66,7 @@ class App
             die();
         } catch (Throwable $err) {
             // Bắt lỗis
-            // ob_clean();
+            ob_clean();
             $err_code = $err->getCode();
             if ($err_code != 404) {
                 $err_code = 500;

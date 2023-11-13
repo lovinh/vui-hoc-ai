@@ -228,10 +228,10 @@ class CourseModel extends BaseModel
 
     public function get_course_status(int $course_id)
     {
-        $banner = $this->db->table('course')->select_field('course_banner')->where('course_id', '=', $course_id)->first();
+        $status = $this->db->table('course')->select_field('course_status')->where('course_id', '=', $course_id)->first();
 
-        if (!empty($banner)) {
-            return $banner['course_banner'];
+        if (!empty($status)) {
+            return $status['course_status'];
         }
         return null;
     }

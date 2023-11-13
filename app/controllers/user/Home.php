@@ -26,6 +26,7 @@ class Home extends BaseController
 
         $data = [
             "page-title" => "Vui học AI - Trang chủ",
+            "home" => true,
             "view" => "user/home",
             "author" => $author_model,
             "newest_courses" => $course_model->get_newest_courses()

@@ -1,4 +1,7 @@
 <?php
+// Load PHPMailer
+require_once "vendor/autoload.php";
+
 define('_DIR_ROOT', str_replace('\\', '/', __DIR__));
 // Handle http root
 // Get web url protocol
@@ -32,6 +35,7 @@ if (!$app_config["debug_mode"]) {
 } else {
     error_reporting(E_ALL);
 }
+
 
 
 // Load all helper
