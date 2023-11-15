@@ -11,7 +11,7 @@ use function app\core\helper\route_url;
 
 class AuthBackToSignInMiddleware implements IMiddleware
 {
-    public function handle(Request $request, callable $next)
+    public function handle(Request $request, callable $next, $params = [])
     {
         if (empty(Session::get('user_id'))) {
             redirect(route_url('user.auth.index'));

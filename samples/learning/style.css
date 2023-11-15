@@ -1,0 +1,18 @@
+/* Add your custom styles here */
+.sidebar {
+    display: none;
+    /* Add more styles as needed */
+}
+
+.btn {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 5px;
+    height: 100vh; /* This sets the height to 100% of the viewport height */
+}

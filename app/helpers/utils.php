@@ -2,6 +2,9 @@
 
 namespace app\core\helper;
 
+use app\core\model\user\UserModel;
+use app\core\Session;
+
 function toSlug($str)
 {
     return $str;

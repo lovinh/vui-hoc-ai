@@ -6,9 +6,11 @@ use app\core\http_context\Request;
 use app\core\http_context\Response;
 use app\core\middleware\BaseMiddleware;
 use ErrorException;
+use Exception;
 use InvalidArgumentException;
 
 use function app\core\helper\url;
+use function PHPSTORM_META\type;
 
 class Route
 {
@@ -219,6 +221,20 @@ class Route
         }
         return new self();
     }
+    public static function get_params($route_name)
+    {
+        $id = $route_name;
+        if (is_string($route_name)) {
+            if (!array_key_exists($route_name, self::$mapping_name_idx)) {
+                throw new InvalidArgumentException("ROUTE INVALID ROUTE_NAME: Không tồn tại route có tên '$route_name'!");
+            }
+            $id = self::$mapping_name_idx[$route_name];
+        }
+        if (!array_key_exists($id, self::$routes)) {
+            throw new InvalidArgumentException("ROUTE INVALID ROUTE INDEX: Không tồn tại route có index '$id'!");
+        }
+        return self::$routes[$id];
+    }
 
     // Handling method
 
@@ -255,7 +271,7 @@ class Route
 
             if (!empty($route['middleware'])) {
                 foreach ($route['middleware'] as $middleware) {
-                    self::$route_middleware->add(new $middleware());
+                    self::$route_middleware->add(new $middleware(), $mapping_result['params']);
                 }
 
                 self::$route_middleware->run($request);

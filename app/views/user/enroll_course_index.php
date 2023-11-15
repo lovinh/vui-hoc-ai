@@ -59,7 +59,7 @@ $banner = empty($model['banner'] ?? $model['thumbnail']) ? 'assets/user/img/cour
             <!-- Payment Form -->
             <div class="col-md-6">
                 <h2>Payment Details</h2>
-                <form method="post" action="">
+                <form method="post" action="{{ route_url('user.enroll.payment', ['id' => $model['id']]) }}">
                     <div class="form-group">
                         <label for="cardName">Name on Card</label>
                         <input type="text" class="form-control" id="cardName" placeholder="LUU DINH LUYEN" />

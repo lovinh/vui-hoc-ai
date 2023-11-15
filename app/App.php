@@ -235,12 +235,8 @@ class App
         if (is_array($handler['handler'])) {
             $handler['handler'][0] = new $handler['handler'][0]();
         }
-        // var_dump($handler['handler']());
-        // echo '<pre>';
-        // print_r(Route::$routes);
-        // echo '</pre>';
+        
         $response = call_user_func_array($handler['handler'], $handler['params']);
-        // var_dump($response);
 
         try {
             if (!($response instanceof Response)) {

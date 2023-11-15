@@ -11,6 +11,10 @@ class CourseModel extends BaseModel
         parent::__construct();
     }
 
+    public function is_course_exists(int $course_id)
+    {
+        return $this->db->table('course')->select_field('course_id')->where('course_id', '=',  $course_id)->first() == null ? false : true;
+    }
     public function get_courses()
     {
         $list_id = $this->db->table('course')->select_field('course_id')->get();

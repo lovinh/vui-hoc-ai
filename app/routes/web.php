@@ -3,11 +3,17 @@
 
 use app\core\controller\user\Auth;
 use app\core\controller\user\Course;
+use app\core\controller\user\Dashboard;
 use app\core\controller\user\Enrollment;
 use app\core\controller\user\Home;
+use app\core\controller\user\LearningCourse;
+use app\core\http_context\Response;
 use app\core\middleware\user\AuthBackHomeMiddleware;
 use app\core\middleware\user\AuthBackToSignInMiddleware;
 use app\core\middleware\user\AuthHasLoginedMiddleware;
+use app\core\middleware\user\HasEnrolledMiddleware;
+use app\core\middleware\user\IsValidCourseMiddleware;
+use app\core\middleware\user\RedirectIfEnrolledMiddleware;
 use app\core\model\user\CourseModel;
 use app\core\Route;
 use app\core\view\View;
@@ -23,9 +29,16 @@ Route::get('/course/subject/{subject}', [Course::class, 'search_by_subject'])->n
 
 Route::get('/course/detail/{id}', [Course::class, 'detail'])
     ->name('user.course.detail')
-    ->where('id', '^[0-9]*$');
+    ->where('id', '^[0-9]*$')
+    ->middleware(RedirectIfEnrolledMiddleware::class, IsValidCourseMiddleware::class);
 
 Route::get('/search', [Course::class, 'search_by_name'])->name('user.course.search_name');
+
+// Dashboard
+
+Route::get('/user/{id}/dashboard', [Dashboard::class, 'index'])
+    ->name('user.dashboard.index')
+    ->middleware(AuthHasLoginedMiddleware::class);
 
 // Authentication
 Route::group(function () {
@@ -36,12 +49,6 @@ Route::group(function () {
     Route::get('/auth/sign-up', [Auth::class, 'register'])->name('user.auth.register');
 
     Route::post('/auth/sign_up', [Auth::class, 'sign_up'])->name('user.auth.sign_up');
-
-    Route::get('/auth/validate-email', [Auth::class, 'validate_email'])->name('user.auth.validate_email');
-
-    Route::post('/auth/validate_email', [Auth::class, 'validating_email'])->name('user.auth.validating_email');
-
-    Route::get('/auth/validate_email_send_again', [Auth::class, 'validating_email_send_again'])->name('user.auth.validating_email_send_again');
 
     Route::get('/auth/sign-in/forget-password', [Auth::class, 'forget_password_index'])->name('user.auth.forget_password');
 
@@ -54,30 +61,61 @@ Route::group(function () {
     Route::match(['get', 'post'], '/auth/sign-in/forget-password/new-password', [Auth::class, 'forget_password_new_password'])->name('user.auth.forget_password_new');
 })->middleware(AuthBackHomeMiddleware::class);
 
+Route::get('/auth/validate-email', [Auth::class, 'validate_email'])->name('user.auth.validate_email');
+
+Route::post('/auth/validate_email', [Auth::class, 'validating_email'])->name('user.auth.validating_email');
+
+Route::get('/auth/validate_email_send_again', [Auth::class, 'validating_email_send_again'])->name('user.auth.validating_email_send_again');
+
 Route::get('/auth/sign_out', [Auth::class, 'sign_out'])->name('user.auth.sign_out');
 
 Route::group(function () {
     Route::get('/course/{id}/enroll', [Enrollment::class, 'index'])
         ->name('user.enroll.index')
         ->where('id', '^[0-9]*$');
+    Route::post('/course/{id}/enrolling', [Enrollment::class, 'payment'])
+        ->where('id', '^[0-9]*$')
+        ->name('user.enroll.payment');
     Route::get('/course/{id}/enroll/status', [Enrollment::class, 'payment_status'])
-        ->name('user.enroll.payment_status');
+        ->name('user.enroll.payment_status')
+        ->where('id', '^[0-9]*$');
 })->middleware(AuthHasLoginedMiddleware::class);
 
+Route::get('/learning/{id}/introduction', [LearningCourse::class, 'index'])
+    ->name('user.learning.intro')
+    ->where('id', '^[0-9]*$')
+    ->middleware([AuthHasLoginedMiddleware::class, HasEnrolledMiddleware::class]);
 
+Route::get('/learning/{course_id}/detail/{lesson_id}/{section_id}', [LearningCourse::class, 'learn_section'])
+    ->name('user.learning.detail')
+    ->where('course_id', '^[0-9]*$')
+    ->where('lesson_id', '^[0-9]*$')
+    ->where('section_id', '^[0-9]*$')
+    ->middleware([AuthHasLoginedMiddleware::class, HasEnrolledMiddleware::class]);
 
+Route::get('/learning/{id}/progress', [LearningCourse::class, 'progress'])
+    ->name('user.learning.progress')
+    ->where('id', '^[0-9]*$')
+    ->middleware([AuthHasLoginedMiddleware::class, HasEnrolledMiddleware::class]);
 
-
+// Exception
 Route::fallback(function () {
     $data = [
         'view' => 'errors/404',
-        'page-title' => "Vui Hoc AI - Page not found"
+        'page-title' => "Vui Hoc AI - Page not found",
+        'home' => true,
     ];
-    return View::render('layouts/user_layout', $data);
+    return View::render('layouts/user_layout', $data)->response_code(404);
 });
 
 // Just for testing
 Route::get('/test', function () {
-    $mail = new PHPMailer(true);
-    var_dump($mail);
+    $data = [
+        'view' => 'test',
+        'page-title' => "Test - Vui Hoc AI",
+    ];
+    return View::render('layouts/user_learning_layout', $data);
+});
+Route::get('/hey', function () {
+    return "Ok it good!";
 });

@@ -4,6 +4,8 @@ namespace app\core\controller\user;
 
 use app\core\controller\BaseController;
 use app\core\model\user\CourseModel;
+use app\core\model\user\PaymentModel;
+use app\core\Session;
 use app\core\view\View;
 
 use function app\core\helper\load_model;
@@ -65,12 +67,26 @@ class Course extends BaseController
          * @var CourseModel
          */
         $course_model = load_model('user\CourseModel');
+        /**
+         * @var PaymentModel
+         */
+        $payment_model = load_model('user\PaymentModel');
 
-        if ($course_model->is_have_course($id)) {
-        }
+        $enrolled_users_id = $payment_model->get_users_id($id);
+
+        $has_enrolled = false;
+
+        if (!empty($enrolled_users_id))
+            foreach ($enrolled_users_id as $user_id) {
+                if (hash('sha256', $user_id['payment_user_id']) == Session::get('user')) {
+                    $has_enrolled = true;
+                    break;
+                }
+            }
 
         $course_detail = [
             "id" => $id,
+            "has_enrolled" => $has_enrolled,
             "name" => $course_model->get_course_name($id),
             "description" => $course_model->get_course_description($id),
             "author" => $course_model->get_course_author($id),

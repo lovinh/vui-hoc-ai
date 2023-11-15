@@ -2,7 +2,9 @@
 $command = [
     "create" => [
         "controller",
-        "model"
+        "view",
+        "model",
+        "middleware"
     ],
     "delete" => [
         "controller",

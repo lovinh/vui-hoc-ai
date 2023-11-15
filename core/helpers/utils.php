@@ -29,6 +29,7 @@ function redirect(string $url_location, int $code = 301)
 {
     http_response_code($code);
     header('Location: ' . $url_location);
+    exit;
 }
 
 function response()

@@ -24,3 +24,19 @@
     color: #f8b600;
     font: 24px Arial, sans-serif;
   }
+
+.course_details_left .content_wrapper 
+{
+    display: block;
+}
+
+.course_details_left .content_wrapper img
+{
+    display: block;
+    margin: auto;
+}
+
+.course_details_left .content_wrapper h1
+{
+    font-size: 24px;
+}

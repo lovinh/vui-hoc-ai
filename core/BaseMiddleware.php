@@ -16,18 +16,18 @@ class BaseMiddleware
         };
     }
 
-    public function add(IMiddleware $middleware)
+    public function add(IMiddleware $middleware, $params = [])
     {
         $next = $this->next_middleware;
 
-        $this->next_middleware = function (Request $request) use ($middleware, $next) {
-            return $middleware->handle($request, $next);
+        $this->next_middleware = function (Request $request) use ($middleware, $next, $params) {
+            return $middleware->handle($request, $next, $params);
         };
     }
 
-    public function run(Request $request)
+    public function run(Request $request, $params = [])
     {
-        call_user_func($this->next_middleware, $request);
+        call_user_func($this->next_middleware, $request, $params);
     }
 
     public function clear()

@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
             $user_id_list = $this->db->table('users')->select_field('user_id')->get();
             foreach ($user_id_list as $key => $value) {
                 if ($user == hash('sha256', $value['user_id'])) {
+                    View::share('user_id', $value['user_id']);
                     View::share('user_name', $user_model->get_user_name($value['user_id']));
                     View::share('user_avt', $user_model->get_user_avatar($value['user_id']));
                     View::share('user_status', $user_model->get_user_status($value['user_id']));

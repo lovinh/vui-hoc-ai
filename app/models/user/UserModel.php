@@ -3,9 +3,33 @@
 namespace app\core\model\user;
 
 use app\core\model\BaseModel;
+use app\core\Session;
 
 class UserModel extends BaseModel
 {
+    private $context;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->context = $this->db->table('users');
+    }
+
+    public function get_user_id_from_session()
+    {
+        $user = Session::get('user');
+        if (empty($user))
+            return null;
+
+        $user_id_list = $this->context->select_field('user_id')->get();
+
+        foreach ($user_id_list as $user_id) {
+            if (hash('sha256', $user_id['user_id']) == $user)
+                return $user_id['user_id'];
+        }
+        
+        return null;
+    }
     public function get_users(int $limit = -1)
     {
         if ($limit == -1)
