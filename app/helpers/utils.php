@@ -28,3 +28,4 @@ function mask_email($email)
 
     return implode("@", $mail_parts);
 }
+

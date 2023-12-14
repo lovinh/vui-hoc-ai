@@ -36,3 +36,13 @@ function response()
 {
     return new Response();
 }
+
+function str_date(string $date, string $fmt = "d-m-Y")
+{
+    return date($fmt, strtotime($date));
+}
+
+function str_datetime(string $datetime, string $fmt = "d-m-Y H:i:s")
+{
+    return date($fmt, strtotime($datetime));
+}

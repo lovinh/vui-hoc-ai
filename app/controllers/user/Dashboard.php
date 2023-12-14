@@ -36,9 +36,10 @@ class Dashboard extends BaseController
         $model = [
             'courses' => $courses_registered_id,
         ];
-        
+
         $data = [
             'page-title' => 'Dashboard - Vui Hoc AI',
+            'page' => 'dashboard',
             'view' => 'user/dashboard',
             'user_id' => $user_id,
             'model' => $model

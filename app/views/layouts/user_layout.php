@@ -11,7 +11,7 @@ use function app\core\helper\render_block;
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="icon" href="{{ assets('user/img/favicon.png') }}" type="image/png" />
+    <link rel="icon" href="{{ assets('user/img/logo-3.png') }}" type="image/png" />
     <title>{{$data['page-title']}}</title>
     
     <!-- Bootstrap CSS -->
@@ -27,6 +27,7 @@ use function app\core\helper\render_block;
     <!-- main css -->
     <link rel="stylesheet" href="{{ assets('user/css/style.css') }}" />
     <link rel="stylesheet" href="{{ assets('user/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ assets('user/css/profile.css') }}">
 </head>
 
 <body>

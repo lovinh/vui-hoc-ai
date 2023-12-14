@@ -6,9 +6,11 @@ use app\core\controller\BaseController;
 use app\core\model\user\CourseLessonSectionModel;
 use app\core\model\user\CourseModel;
 use app\core\model\user\LessonModel;
+use app\core\model\user\NoteModel;
 use app\core\model\user\ProgressModel;
 use app\core\model\user\SectionModel;
 use app\core\model\user\UserModel;
+use app\core\Session;
 use app\core\view\View;
 
 use function app\core\helper\load_model;
@@ -92,6 +94,7 @@ class LearningCourse extends BaseController
 
         $data = [
             'page-title' => $course_name . "- Learning - Vui Hoc AI",
+            "page" => "intro",
             'view' => 'user/learning/introduction',
             'model' => $model,
         ];
@@ -157,6 +160,7 @@ class LearningCourse extends BaseController
 
         $data = [
             'page-title' => $course_model->get_course_name($course_id) . "- Learning - Vui Hoc AI",
+            "page" => "learn",
             'view' => 'user/learning/detail',
             'model' => $model,
         ];
@@ -238,14 +242,225 @@ class LearningCourse extends BaseController
 
         $data = [
             'page-title' => $course_model->get_course_name($course_id) . "- Progress - Vui Hoc AI",
+            "page" => "progress",
             'view' => 'user/learning/progress',
             'model' => $model,
         ];
         return View::render('layouts/user_learning_layout', $data);
     }
-    
-    public function note()
+
+    public function note(int $course_id)
     {
-        
+        /**
+         * @var CourseModel
+         */
+        $course_model = load_model('user\CourseModel');
+        /**
+         * @var UserModel
+         */
+        $user_model = load_model('user\UserModel');
+        /**
+         * @var NoteModel
+         */
+        $note_model = load_model('user\NoteModel');
+
+        $user_id = $user_model->get_user_id_from_session();
+
+        $model = [
+            'user_id' => $user_id,
+            'course_name' => $course_model->get_course_name($course_id),
+            'course_id' => $course_id,
+            'notes' => $note_model->get_notes($user_id, $course_id),
+            'msg' => Session::flash('msg')
+        ];
+
+        $data = [
+            'page-title' => $course_model->get_course_name($course_id) . "- Note - Vui Hoc AI",
+            'page' => 'note',
+            'view' => 'user/learning/note',
+            'model' => $model,
+        ];
+        return View::render('layouts/user_learning_layout', $data);
+    }
+
+    public function create_note(int $course_id)
+    {
+        /**
+         * @var CourseModel
+         */
+        $course_model = load_model('user\CourseModel');
+        /**
+         * @var UserModel
+         */
+        $user_model = load_model('user\UserModel');
+        /**
+         * @var NoteModel
+         */
+        $note_model = load_model('user\NoteModel');
+
+        $user_id = $user_model->get_user_id_from_session();
+
+        $model = [
+            'user_id' => $user_id,
+            'course_name' => $course_model->get_course_name($course_id),
+            'course_id' => $course_id,
+            'notes' => $note_model->get_notes($user_id, $course_id)
+        ];
+
+        $data = [
+            'page-title' => $course_model->get_course_name($course_id) . "- Create Note - Vui Hoc AI",
+            'page' => 'note',
+            'view' => 'user/learning/create_note',
+            'model' => $model,
+        ];
+        return View::render('layouts/user_learning_layout', $data);
+    }
+
+    public function creating_note(int $course_id)
+    {
+        /**
+         * @var UserModel
+         */
+        $user_model = load_model('user\UserModel');
+        /**
+         * @var NoteModel
+         */
+        $note_model = load_model('user\NoteModel');
+
+        $user_id = $user_model->get_user_id_from_session();
+
+        $note_content = $this->request->get_fields_data()['note_content'];
+
+        $status = true;
+        if (!empty($note_content)) {
+            $status = $note_model->add_note($user_id, $course_id, html_entity_decode($note_content));
+        }
+
+        Session::flash('msg', [
+            "type" => "create_note",
+            "status" => $status
+        ]);
+
+        redirect(route_url('user.learning.note', ['id' => $course_id]));
+        exit;
+    }
+
+    public function deleting_note(int $course_id, int $note_id)
+    {
+        /**
+         * @var UserModel
+         */
+        $user_model = load_model('user\UserModel');
+        /**
+         * @var NoteModel
+         */
+        $note_model = load_model('user\NoteModel');
+
+        $user_id = $user_model->get_user_id_from_session();
+
+        $status = $note_model->delete_note($user_id, $course_id, $note_id);
+
+        Session::flash('msg', [
+            "type" => "delete_note",
+            "status" => $status
+        ]);
+
+        redirect(route_url('user.learning.note', ['id' => $course_id]));
+        exit;
+    }
+
+    public function edit_note(int $course_id, int $note_id)
+    {
+        /**
+         * @var CourseModel
+         */
+        $course_model = load_model('user\CourseModel');
+        /**
+         * @var UserModel
+         */
+        $user_model = load_model('user\UserModel');
+        /**
+         * @var NoteModel
+         */
+        $note_model = load_model('user\NoteModel');
+
+        $user_id = $user_model->get_user_id_from_session();
+
+        $model = [
+            'user_id' => $user_id,
+            'course_name' => $course_model->get_course_name($course_id),
+            'course_id' => $course_id,
+            'note' => $note_model->get_note($user_id, $course_id, $note_id)
+        ];
+
+        $data = [
+            'page-title' => $course_model->get_course_name($course_id) . "- Edit Note - Vui Hoc AI",
+            'page' => 'note',
+            'view' => 'user/learning/edit_note',
+            'model' => $model,
+        ];
+        return View::render('layouts/user_learning_layout', $data);
+    }
+
+    public function editing_note(int $course_id, int $note_id)
+    {
+        /**
+         * @var UserModel
+         */
+        $user_model = load_model('user\UserModel');
+        /**
+         * @var NoteModel
+         */
+        $note_model = load_model('user\NoteModel');
+
+        $user_id = $user_model->get_user_id_from_session();
+
+        $note_content = $this->request->get_fields_data()['note_content'];
+
+        $status = true;
+        if (!empty($note_content)) {
+            $status = $note_model->edit_note($user_id, $course_id, $note_id, html_entity_decode($note_content));
+        }
+
+        Session::flash('msg', [
+            "type" => "edit_note",
+            "status" => $status
+        ]);
+
+        redirect(route_url('user.learning.note', ['id' => $course_id]));
+        exit;
+    }
+
+    public function note_detail(int $course_id, int $note_id)
+    {
+        /**
+         * @var CourseModel
+         */
+        $course_model = load_model('user\CourseModel');
+        /**
+         * @var UserModel
+         */
+        $user_model = load_model('user\UserModel');
+        /**
+         * @var NoteModel
+         */
+        $note_model = load_model('user\NoteModel');
+
+        $user_id = $user_model->get_user_id_from_session();
+
+        $model = [
+            'user_id' => $user_id,
+            'course_name' => $course_model->get_course_name($course_id),
+            'course_id' => $course_id,
+            'note' => $note_model->get_note($user_id, $course_id, $note_id)
+        ];
+
+        $data = [
+            'page-title' => $course_model->get_course_name($course_id) . "- Note Detail - Vui Hoc AI",
+            'page' => 'note',
+            'view' => 'user/learning/note_detail',
+            'model' => $model,
+        ];
+        return View::render('layouts/user_learning_layout', $data);
     }
 }

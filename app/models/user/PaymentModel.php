@@ -36,7 +36,7 @@ class PaymentModel extends BaseModel
         $courses = $this->db->table('payment')
             ->join('course', 'course.course_id = payment.payment_course_id')
             ->where('payment_user_id', '=', $user_id)
-            ->order_by('payment_created_time', '=', $user_id)
+            ->order_by('payment_created_time', '=', true)
             ->get();
 
         /**
@@ -63,5 +63,17 @@ class PaymentModel extends BaseModel
             return $r_courses;
         }
         return null;
+    }
+
+    public function is_user_learner(int $user_id)
+    {
+        $courses = $this->db->table('payment')
+            ->join('course', 'course.course_id = payment.payment_course_id')
+            ->where('payment_user_id', '=', $user_id)
+            ->order_by('payment_created_time', '=', true)
+            ->get();
+        if (empty($courses))
+            return false;
+        return true;
     }
 }

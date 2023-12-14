@@ -29,6 +29,6 @@ class HasEnrolledMiddleware implements IMiddleware
                     return $next($request);
                 }
             }
-        redirect(route_url('user.home.index'));
+        redirect(route_url('user.dashboard.index'));
     }
 }

@@ -61,11 +61,11 @@ $banner = empty($model['banner'] ?? $model['thumbnail']) ? 'assets/user/img/cour
                 <h2>You have enrolled the course!</h2>
                 <p>Thank you for registering for the course. Feel free to brush up on your new knowledge now, or you can return to the dashboard to view your currently enrolled courses. Don't forget to give us a review of your learning experience.</p>
                 <div>
-                    <a href="{{ route_url('user.course.index') }}" class=" primary-btn mb-3 mb-sm-0">Start Course</a>
-                    <a href="#" class="primary-btn2 ml-sm-3 ml-0">See enrolled courses</a>
+                    <a href="{{ route_url('user.learning.intro', ['id' => $model['id']]) }}" class=" primary-btn mb-3 mb-sm-0">Start Course</a>
+                    <a href="{{ route_url('user.dashboard.index') }}" class="primary-btn2 ml-sm-3 ml-0">See enrolled courses</a>
                 </div>
             </div>
         </div>
-    </div>
+    </div>  
 </section>
 <!--================ End Course Enrollment Area =================-->

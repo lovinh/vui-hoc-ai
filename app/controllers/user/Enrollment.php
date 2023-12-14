@@ -24,9 +24,15 @@ class Enrollment extends BaseController
          * @var CourseModel
          */
         $model = load_model('user\CourseModel');
+
+        if ($model->get_course_price($id) == 0) {
+            redirect('user.enroll.payment_status');
+            exit;
+        }
         $data = [
             "page-title" => $model->get_course_name($id) . " - Enrollment - Vui Hoc AI",
             "view" => 'user/enroll_course_index',
+            'page' => 'course',
             "model" => [
                 "id" => $id,
                 "name" => $model->get_course_name($id),
@@ -82,6 +88,7 @@ class Enrollment extends BaseController
         $data = [
             "page-title" => $model->get_course_name($id) . " - Enrollment - Vui Hoc AI",
             "view" => 'user/enroll_course_status',
+            'page' => 'course',
             "model" => [
                 "id" => $id,
                 "name" => $model->get_course_name($id),

@@ -40,3 +40,65 @@
 {
     font-size: 24px;
 }
+
+.note-content {
+    margin-top: 40px;
+}
+
+.note-item {
+    margin-top: 25px;
+}
+
+.note-item-body {
+    max-height: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.note-item-body h1 {
+    font-size: 24px;
+}
+
+.note-item-body h2 {
+    font-size: 20px;
+}
+
+.note-item-body h3 {
+    font-size: 16px;
+}
+
+.note-item-body h4 {
+    font-size: 14px;
+}
+
+.note-item-body img {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+}
+.note-item-nav {
+    margin-top: 15px;
+}
+
+.note-detail-content {
+    margin-top: 10px;
+}
+.note-detail-content img {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+.note-edit-content {
+    margin-top: 18px;
+}
+
+.note-create-content {
+    height: 500px;
+}
+
+.ck-editor__editable_inline{
+    min-height: 300px;
+}

@@ -34,14 +34,14 @@ $user_status = View::get_data_share('user_status');
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
-                        <li class="nav-item active">
+                        <li class="nav-item {{ $data['page'] == 'intro' ? 'active' : false }}">
                             <a class="nav-link" href="{{ route_url('user.learning.intro', ['id' => $data['model']['course_id']]) }}">Course</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ $data['page'] == 'progress' ? 'active' : false }}">
                             <a class="nav-link" href="{{ route_url('user.learning.progress', ['id' =>  $data['model']['course_id']]) }}">Progress</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="about-us.html">Note</a>
+                        <li class="nav-item {{ $data['page'] == 'note' ? 'active' : false }}">
+                            <a class="nav-link" href="{{ route_url('user.learning.note', ['id' => $data['model']['course_id']]) }}">Note</a>
                         </li>
                         <li class="nav-item submenu dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More</a>
@@ -73,7 +73,7 @@ $user_status = View::get_data_share('user_status');
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="{{ route_url('user.profile.index', ['id' => $user_id]) }}">
                                         <i class="far fa-id-card p-2"></i>
                                         Your profile
                                     </a>

@@ -20,6 +20,7 @@ class Course extends BaseController
         $course_model = load_model('user\CourseModel');
         $data = [
             'page-title' => "Vui hoc AI - All Courses",
+            'page' => "course",
             'course_result_title' => "All courses",
             'view' => 'user/course',
             'courses' => $course_model->get_courses(),
@@ -36,6 +37,7 @@ class Course extends BaseController
         $course_model = load_model('user\CourseModel');
         $data = [
             'page-title' => "Vui Hoc AI - " . $subject . " Courses",
+            'page' => "course",
             'course_result_title' => "All '" . ucfirst($subject) . "' courses",
             'view' => 'user/course',
             'courses' => $course_model->get_courses_by_subject($subject),
@@ -53,6 +55,7 @@ class Course extends BaseController
         $course_name = urldecode($this->request->get_fields_data()['search_input']);
         $data = [
             'page-title' => "Vui Hoc AI - Search Course " . $course_name,
+            'page' => "course",
             'course_result_title' => "All courses match '" . $course_name . "'",
             'view' => 'user/course',
             'courses' => $course_model->get_courses_by_search($course_name),
@@ -102,6 +105,7 @@ class Course extends BaseController
 
         $data = [
             'page-title' => $course_detail['name'] . ' - Course - Vui Hoc AI',
+            'page' => "course",
             'view' => 'user/course_detail',
             'model' => $course_detail
         ];

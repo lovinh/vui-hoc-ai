@@ -39,7 +39,11 @@ $course_remain = $course_count % 3;
             <div class="col-lg-5">
                 <div class="main_title">
                     <h2 class="mb-3">You have enrolled {{ $course_count }} courses!</h2>
+                    @if ($course_count == 0)
+                    <p class="mb-3">Hey! Let's start your journey by enrolling some coures <i class="far fa-sad-tear"></i></p>
+                    @else 
                     <p class="mb-3">Check it now!</p>
+                    @endif
                 </div>
             </div>
         </div>
@@ -47,8 +51,8 @@ $course_remain = $course_count % 3;
         @for ($i=0; $i < $n_rows; $i++) 
         <div class="row p-3">
             @for ($k = 0; $k < 3; $k++) 
-            @if (array_key_exists($i * 3 + $k, $model['courses'])) 
-            <div class="col-lg-4">
+            @if (array_key_exists($i * 3 + $k, $model['courses']))
+             <div class="col-lg-4">
                 <div class="single_course">
                     <div class="course_head">
                         <img class="img-fluid" src="{{ empty($model['courses'][$i * 3 + $k]['course_thumbnail']) ? assets('user/img/default-course-thumbnail.png') : public_url('files/' . $model['courses'][$i * 3 + $k]['course_thumbnail']) }}" alt="" style="height: 300px; object-fit: cover;" />
@@ -67,21 +71,13 @@ $course_remain = $course_count % 3;
                         </div>
                     </div>
                 </div>
+             </div>
+            @endif 
+        @endfor
     </div>
-    @endif
     @endfor
-</div>
-@endfor
-@else
-<div class="row p-3">
-    <div class="col-lg-12">
-        <div class="main_title">
-            <h3 class="mb-3">No courses found!</h3>
-        </div>
+    @endif
     </div>
-</div>
-@endif
-</div>
 </div>
 
 <!--================ End All Courses Area ===================-->

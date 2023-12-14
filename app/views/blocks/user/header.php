@@ -36,7 +36,7 @@ $user_status = View::get_data_share('user_status');
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
-                <a class="navbar-brand logo_h" href="index.html"><img src="{{ assets('user/img/logo.png') }}" alt="" /></a>
+                <a class="navbar-brand logo_h" href="{{ route_url('user.home.index') }}"><img src="{{ assets('user/img/logo-3.png') }}" alt="" width="45px"/><h1 class="{{ $data['page'] == 'home' ?  false : 'text-white'}}" style="display: inline; vertical-align: middle; margin-left: 10px;">Vui Hoc AI</h1></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon-bar"></span> <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -44,13 +44,13 @@ $user_status = View::get_data_share('user_status');
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
-                        <li class="nav-item active">
+                        <li class="nav-item {{ $data['page'] == 'home' ? 'active' : false }}">
                             <a class="nav-link" href="{{ url('') }}">Home</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ $data['page'] == 'course' ? 'active' : false }}">
                             <a class="nav-link" href="{{ route_url('user.course.index') }}">Course</a>
                         </li>
-                        <li class="nav-item submenu dropdown">
+                        <li class="nav-item submenu dropdown {{ $data['page'] == 'subject' ? 'active' : false }}">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subjects</a>
                             <ul class="dropdown-menu">
                                 @if (!empty($subjects))
@@ -98,7 +98,7 @@ $user_status = View::get_data_share('user_status');
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">
+                                    <a class="nav-link" href="{{ route_url('user.profile.index', ['id' => $user_id]) }}">
                                         <i class="far fa-id-card p-2"></i>
                                         Your profile
                                     </a>

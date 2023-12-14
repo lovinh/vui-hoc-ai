@@ -5,6 +5,8 @@ namespace app\core\model\user;
 use app\core\model\BaseModel;
 use app\core\Session;
 
+use function app\core\helper\load_model;
+
 class UserModel extends BaseModel
 {
     private $context;
@@ -27,7 +29,7 @@ class UserModel extends BaseModel
             if (hash('sha256', $user_id['user_id']) == $user)
                 return $user_id['user_id'];
         }
-        
+
         return null;
     }
     public function get_users(int $limit = -1)
@@ -45,6 +47,24 @@ class UserModel extends BaseModel
         $user = $this->db->table('users')->select_field('user_first_name, user_last_name')->where('user_id', '=', $user_id)->first();
         if (!empty($user)) {
             return $user['user_first_name'] . " " . $user['user_last_name'];
+        }
+        return null;
+    }
+
+    public function get_user_first_name(int $user_id)
+    {
+        $user = $this->db->table('users')->select_field('user_first_name, user_last_name')->where('user_id', '=', $user_id)->first();
+        if (!empty($user)) {
+            return $user['user_first_name'];
+        }
+        return null;
+    }
+
+    public function get_user_last_name(int $user_id)
+    {
+        $user = $this->db->table('users')->select_field('user_first_name, user_last_name')->where('user_id', '=', $user_id)->first();
+        if (!empty($user)) {
+            return $user['user_last_name'];
         }
         return null;
     }
@@ -102,7 +122,24 @@ class UserModel extends BaseModel
         }
         return null;
     }
-
+    public function get_user_information(int $user_id)
+    {
+        $info = $this->db->table('users')
+            ->join('user_info', 'users.user_id = user_info.info_user_id')
+            ->where('user_id', '=', $user_id)
+            ->get();
+        if (!empty($info)) {
+            $r_info = [];
+            foreach ($info as $inf) {
+                $r_info[] = [
+                    "info_type" => $inf['info_type'],
+                    "info_description" => $inf['info_description'],
+                ];
+            }
+            return $r_info;
+        }
+        return null;
+    }
     public function update_user(int $user_id, array $data)
     {
         return $this->db->table('users')->where('user_id', '=', $user_id)->update_value($data);

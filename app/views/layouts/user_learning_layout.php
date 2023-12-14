@@ -11,7 +11,7 @@ use function app\core\helper\render_block;
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="icon" href="{{ assets('user/img/favicon.png') }}" type="image/png" />
+    <link rel="icon" href="{{ assets('user/img/logo-3.png') }}" type="image/png" />
     <title>{{$data['page-title']}}</title>
 
     <!-- Bootstrap CSS -->
@@ -27,6 +27,7 @@ use function app\core\helper\render_block;
     <!-- main css -->
     <link rel="stylesheet" href="{{ assets('user/css/style.css') }}" />
     <link rel="stylesheet" href="{{ assets('user/css/custom.css') }}">
+
 </head>
 
 <body>
@@ -60,6 +61,9 @@ use function app\core\helper\render_block;
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
     <script src="{{ assets('user/js/gmaps.min.js') }}"></script>
     <script src="{{ assets('user/js/theme.js') }}"></script>
+    <!-- ckeditor -->
+    <script src="{{ assets('user/vendors/ckeditor/build/ckeditor.js') }}"></script>
+    <script src="{{ assets('user/js/custom.js') }}"></script>
 </body>
 
 </html>

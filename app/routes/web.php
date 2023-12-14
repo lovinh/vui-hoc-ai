@@ -7,10 +7,12 @@ use app\core\controller\user\Dashboard;
 use app\core\controller\user\Enrollment;
 use app\core\controller\user\Home;
 use app\core\controller\user\LearningCourse;
+use app\core\controller\user\Profile;
 use app\core\http_context\Response;
 use app\core\middleware\user\AuthBackHomeMiddleware;
 use app\core\middleware\user\AuthBackToSignInMiddleware;
 use app\core\middleware\user\AuthHasLoginedMiddleware;
+use app\core\middleware\user\HasActiveMiddleware;
 use app\core\middleware\user\HasEnrolledMiddleware;
 use app\core\middleware\user\IsValidCourseMiddleware;
 use app\core\middleware\user\RedirectIfEnrolledMiddleware;
@@ -61,14 +63,15 @@ Route::group(function () {
     Route::match(['get', 'post'], '/auth/sign-in/forget-password/new-password', [Auth::class, 'forget_password_new_password'])->name('user.auth.forget_password_new');
 })->middleware(AuthBackHomeMiddleware::class);
 
-Route::get('/auth/validate-email', [Auth::class, 'validate_email'])->name('user.auth.validate_email');
+Route::get('/auth/validate-email', [Auth::class, 'validate_email'])->name('user.auth.validate_email')->middleware([AuthHasLoginedMiddleware::class]);
 
-Route::post('/auth/validate_email', [Auth::class, 'validating_email'])->name('user.auth.validating_email');
+Route::post('/auth/validate_email', [Auth::class, 'validating_email'])->name('user.auth.validating_email')->middleware([AuthHasLoginedMiddleware::class]);
 
-Route::get('/auth/validate_email_send_again', [Auth::class, 'validating_email_send_again'])->name('user.auth.validating_email_send_again');
+Route::get('/auth/validate_email_send_again', [Auth::class, 'validating_email_send_again'])->name('user.auth.validating_email_send_again')->middleware([AuthHasLoginedMiddleware::class]);
 
 Route::get('/auth/sign_out', [Auth::class, 'sign_out'])->name('user.auth.sign_out');
 
+// Enrollment
 Route::group(function () {
     Route::get('/course/{id}/enroll', [Enrollment::class, 'index'])
         ->name('user.enroll.index')
@@ -79,29 +82,77 @@ Route::group(function () {
     Route::get('/course/{id}/enroll/status', [Enrollment::class, 'payment_status'])
         ->name('user.enroll.payment_status')
         ->where('id', '^[0-9]*$');
-})->middleware(AuthHasLoginedMiddleware::class);
+})->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class]);
+
+// Learning
 
 Route::get('/learning/{id}/introduction', [LearningCourse::class, 'index'])
     ->name('user.learning.intro')
     ->where('id', '^[0-9]*$')
-    ->middleware([AuthHasLoginedMiddleware::class, HasEnrolledMiddleware::class]);
+    ->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class, HasEnrolledMiddleware::class]);
 
 Route::get('/learning/{course_id}/detail/{lesson_id}/{section_id}', [LearningCourse::class, 'learn_section'])
     ->name('user.learning.detail')
     ->where('course_id', '^[0-9]*$')
     ->where('lesson_id', '^[0-9]*$')
     ->where('section_id', '^[0-9]*$')
-    ->middleware([AuthHasLoginedMiddleware::class, HasEnrolledMiddleware::class]);
+    ->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class,  HasEnrolledMiddleware::class]);
 
 Route::get('/learning/{id}/progress', [LearningCourse::class, 'progress'])
     ->name('user.learning.progress')
     ->where('id', '^[0-9]*$')
-    ->middleware([AuthHasLoginedMiddleware::class, HasEnrolledMiddleware::class]);
+    ->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class, HasEnrolledMiddleware::class]);
+
+Route::get('/learning/{id}/note', [LearningCourse::class, 'note'])
+    ->name('user.learning.note')
+    ->where('id', '^[0-9]*$')
+    ->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class, HasEnrolledMiddleware::class]);
+
+Route::get('/learning/{id}/note/{note_id}/detail', [LearningCourse::class, 'note_detail'])
+    ->name('user.learning.note_detail')
+    ->where('id', '^[0-9]*$')
+    ->where('note_id', '^[0-9]*$')
+    ->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class, HasEnrolledMiddleware::class]);
+
+Route::get('/learning/{id}/note/create', [LearningCourse::class, 'create_note'])
+    ->name('user.learning.create_note')
+    ->where('id', '^[0-9]*$')
+    ->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class, HasEnrolledMiddleware::class]);
+
+Route::post('/learning/{id}/note/creating', [LearningCourse::class, 'creating_note'])
+    ->name('user.learning.creating_note')
+    ->where('id', '^[0-9]*$')
+    ->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class, HasEnrolledMiddleware::class]);
+
+Route::post('/learning/{id}/note/{note_id}/deleting', [LearningCourse::class, 'deleting_note'])
+    ->name('user.learning.deleting_note')
+    ->where('id', '^[0-9]*$')
+    ->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class,  HasEnrolledMiddleware::class]);
+
+Route::get('/learning/{id}/note/{note_id}/edit', [LearningCourse::class, 'edit_note'])
+    ->name('user.learning.edit_note')
+    ->where('id', '^[0-9]*$')
+    ->where('note_id', '^[0-9]*$')
+    ->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class, HasEnrolledMiddleware::class]);
+
+Route::post('/learning/{id}/note/{note_id}/editing', [LearningCourse::class, 'editing_note'])
+    ->name('user.learning.editing_note')
+    ->where('id', '^[0-9]*$')
+    ->where('note_id', '^[0-9]*$')
+    ->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class, HasEnrolledMiddleware::class]);
+
+// Profile
+Route::get('/user/{id}/profile', [Profile::class, 'index'])
+    ->name('user.profile.index')
+    ->where('id', '^[0-9]*$')
+    ->middleware([AuthHasLoginedMiddleware::class]);
+
 
 // Exception
 Route::fallback(function () {
     $data = [
         'view' => 'errors/404',
+        'page' => '404',
         'page-title' => "Vui Hoc AI - Page not found",
         'home' => true,
     ];
@@ -109,13 +160,13 @@ Route::fallback(function () {
 });
 
 // Just for testing
-Route::get('/test', function () {
+Route::post('/test', function () {
     $data = [
         'view' => 'test',
         'page-title' => "Test - Vui Hoc AI",
     ];
     return View::render('layouts/user_learning_layout', $data);
-});
+})->name('test');
 Route::get('/hey', function () {
     return "Ok it good!";
 });
