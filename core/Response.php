@@ -13,9 +13,20 @@ class Response
     private $__header_replaced = true;
     private $__status_code = 200;
 
+    public function __construct(array $header = [], int $status_code = 200, mixed $content = null)
+    {
+        $this->__content = $content;
+        $this->__header = $header;
+        $this->__status_code = $status_code;
+    }
     public function set_content($content)
     {
         $this->__content = $content;
+        return $this;
+    }
+    public function set_status_code(int $status_code = 200)
+    {
+        $this->__status_code = $status_code;
         return $this;
     }
 

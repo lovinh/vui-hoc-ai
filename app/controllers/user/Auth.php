@@ -82,7 +82,14 @@ class Auth extends BaseController
             } else {
                 $user_id = $user['user_id'];
                 Session::put('user', hash('sha256', $user_id));
-                redirect(route_url('user.home.index'));
+                /**
+                 * @var string
+                 */
+                $previous_request = Session::get('previous_request');
+                if (empty($previous_request))
+                    redirect(route_url('user.home.index'));
+                else
+                    redirect($previous_request);
                 exit;
             }
         }

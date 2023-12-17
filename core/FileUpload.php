@@ -34,11 +34,12 @@ class FileUpload
             return false;
         }
         $file_type = pathinfo($this->get_file_name())['extension'];
-        $destination = public_path($dir . "/" . md5($this->get_file_tmp_name()) . ".$file_type");
+        $file_name = md5($this->get_file_tmp_name()) . ".$file_type";
+        $destination = public_path($dir . "/" . $file_name);
         if (!move_uploaded_file($this->get_file_tmp_name(), $destination)) {
             return false;
         }
-        return $destination;
+        return $file_name;
     }
     /**
      * Lưu file upload trên thư mục `public/files`, hoặc được chỉ định bởi người dùng, với tên khác.

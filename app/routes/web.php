@@ -1,6 +1,8 @@
 
 <?php
 
+use app\core\controller\author\Course as AuthorCourse;
+use app\core\controller\author\Home as AuthorHome;
 use app\core\controller\user\Auth;
 use app\core\controller\user\Course;
 use app\core\controller\user\Dashboard;
@@ -9,6 +11,8 @@ use app\core\controller\user\Home;
 use app\core\controller\user\LearningCourse;
 use app\core\controller\user\Profile;
 use app\core\http_context\Response;
+use app\core\middleware\author\AuthCheckSameIdLogined;
+use app\core\middleware\author\AuthIsAuthorMiddleware;
 use app\core\middleware\user\AuthBackHomeMiddleware;
 use app\core\middleware\user\AuthBackToSignInMiddleware;
 use app\core\middleware\user\AuthHasLoginedMiddleware;
@@ -16,6 +20,7 @@ use app\core\middleware\user\HasActiveMiddleware;
 use app\core\middleware\user\HasEnrolledMiddleware;
 use app\core\middleware\user\IsValidCourseMiddleware;
 use app\core\middleware\user\RedirectIfEnrolledMiddleware;
+use app\core\middleware\user\SavePreviousRequestMiddleware;
 use app\core\model\user\CourseModel;
 use app\core\Route;
 use app\core\view\View;
@@ -62,6 +67,7 @@ Route::group(function () {
 
     Route::match(['get', 'post'], '/auth/sign-in/forget-password/new-password', [Auth::class, 'forget_password_new_password'])->name('user.auth.forget_password_new');
 })->middleware(AuthBackHomeMiddleware::class);
+
 
 Route::get('/auth/validate-email', [Auth::class, 'validate_email'])->name('user.auth.validate_email')->middleware([AuthHasLoginedMiddleware::class]);
 
@@ -147,6 +153,50 @@ Route::get('/user/{id}/profile', [Profile::class, 'index'])
     ->where('id', '^[0-9]*$')
     ->middleware([AuthHasLoginedMiddleware::class]);
 
+
+// <=== AUTHOR ===>
+
+Route::get('/author/dashboard', [AuthorHome::class, 'index'])
+    ->name('author.home.index')
+    ->middleware([AuthHasLoginedMiddleware::class]);
+
+Route::get('/author/course', [AuthorCourse::class, 'index'])
+    ->name('author.course.index')
+    ->middleware([AuthHasLoginedMiddleware::class]);
+
+Route::get('/author/course/available', [AuthorCourse::class, 'available'])
+    ->name('author.course.available')
+    ->middleware([AuthHasLoginedMiddleware::class]);
+
+Route::get('/author/course/draft', [AuthorCourse::class, 'draft'])
+    ->name('author.course.draft')
+    ->middleware([AuthHasLoginedMiddleware::class]);
+
+Route::get('/author/course/{course_id}/detail', [AuthorCourse::class, 'detail'])
+    ->name('author.course.detail')
+    ->middleware([AuthHasLoginedMiddleware::class]);
+
+Route::get('/author/course/new-course', [AuthorCourse::class, 'new'])
+    ->name('author.course.new')
+    ->middleware([AuthHasLoginedMiddleware::class]);
+
+Route::post('/author/course/creating', [AuthorCourse::class, 'create'])
+    ->name('author.course.creating')
+    ->middleware([AuthHasLoginedMiddleware::class]);
+
+Route::get('/author/course/{course_id}/edit', [AuthorCourse::class, 'edit'])
+    ->name('author.course.edit')
+    ->middleware([AuthHasLoginedMiddleware::class]);
+
+Route::post('/author/course/{course_id}/editing', [AuthorCourse::class, 'editing'])
+    ->name('author.course.editing')
+    ->middleware([AuthHasLoginedMiddleware::class]);
+
+Route::post('/author/course/{course_id}/deleting', [AuthorCourse::class, 'deleting'])
+    ->name('author.course.deleting')
+    ->middleware([AuthHasLoginedMiddleware::class]);
+
+// <=== END AUTHOR ===>
 
 // Exception
 Route::fallback(function () {

@@ -31,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
                     View::share('user_name', $user_model->get_user_name($value['user_id']));
                     View::share('user_avt', $user_model->get_user_avatar($value['user_id']));
                     View::share('user_status', $user_model->get_user_status($value['user_id']));
+                    View::share('user_role', $user_model->get_user_role($value['user_id']));
                     break;
                 }
             }

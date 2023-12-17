@@ -19,7 +19,7 @@ trait DefinedRules
      */
     public function required($message = "")
     {
-        if (!isset($this->__fields_data[$this->__field_name])) {
+        if (isset($this->__fields_data[$this->__field_name])) {
             return $this;
         }
         if (!empty($this->__fields_data[$this->__field_name])) {

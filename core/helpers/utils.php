@@ -32,9 +32,9 @@ function redirect(string $url_location, int $code = 301)
     exit;
 }
 
-function response()
+function response(array $header = [], int $status_code = 200, mixed $content = null)
 {
-    return new Response();
+    return new Response($header, $status_code, $content);
 }
 
 function str_date(string $date, string $fmt = "d-m-Y")

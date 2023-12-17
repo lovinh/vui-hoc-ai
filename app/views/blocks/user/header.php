@@ -16,6 +16,8 @@ $user_avt = View::get_data_share('user_avt');
 
 $user_status = View::get_data_share('user_status');
 
+$user_role = View::get_data_share('user_role');
+
 
 @endphp
 @if (strtoupper($user_status) == strtoupper("deactive"))
@@ -36,7 +38,9 @@ $user_status = View::get_data_share('user_status');
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
-                <a class="navbar-brand logo_h" href="{{ route_url('user.home.index') }}"><img src="{{ assets('user/img/logo-3.png') }}" alt="" width="45px"/><h1 class="{{ $data['page'] == 'home' ?  false : 'text-white'}}" style="display: inline; vertical-align: middle; margin-left: 10px;">Vui Hoc AI</h1></a>
+                <a class="navbar-brand logo_h" href="{{ route_url('user.home.index') }}"><img src="{{ assets('user/img/logo-3.png') }}" alt="" width="45px" />
+                    <h1 class="{{ $data['page'] == 'home' ?  false : 'text-white'}}" style="display: inline; vertical-align: middle; margin-left: 10px;">Vui Hoc AI</h1>
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon-bar"></span> <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -72,6 +76,11 @@ $user_status = View::get_data_share('user_status');
                         <li class="nav-item">
                             <a class="nav-link" href="about-us.html">Documents</a>
                         </li>
+                        @if (!empty($user) && !empty($user_role) && $user_role == "author")
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route_url('author.home.index') }}">Author Studio</a>
+                        </li>
+                        @endif
                         <li class="nav-item">
                             <a href="#" class="nav-link search" id="search">
                                 <i class="ti-search"></i>
