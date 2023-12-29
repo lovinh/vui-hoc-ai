@@ -86,7 +86,11 @@ $model = $data['model'];
                 <ul>
                     <h3>Pick up where you left off</h3>
                     <!-- <br> -->
+                    @if (strtolower($model['status']) != 'available')
+                    <a href="#" class="primary-btn2 text-uppercase enroll rounded-0 text-white unavailable">Course Unavailable</a>
+                    @else
                     <a href="{{ route_url('user.learning.detail', ['course_id' => $model['course_id'], 'lesson_id' => $model['nearest_progress']['lesson_id'], 'section_id' => $model['nearest_progress']['section_id']]) }}" class="genric-btn info p-1 text-uppercase enroll rounded-0 text-white">{{ $model['begin']? 'Start learning' : 'Resume' }}</a>
+                    @endif
                 </ul>
                 <ul>
                     <li>

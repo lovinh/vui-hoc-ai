@@ -2,9 +2,6 @@
 
 namespace app\core\helper;
 
-use app\core\model\user\UserModel;
-use app\core\Session;
-
 function toSlug($str)
 {
     return $str;
@@ -29,3 +26,12 @@ function mask_email($email)
     return implode("@", $mail_parts);
 }
 
+function add_pad(int $value)
+{
+    return $value < 10 ? ($value > 0 ? str_pad(strval($value), 2, "0", STR_PAD_LEFT) : $value) : $value;
+}
+
+function precent(int $first, int $second)
+{
+    return $second != 0 ? ($first * 100) / $second : 0;
+}

@@ -41,13 +41,16 @@ Route::get('/course/detail/{id}', [Course::class, 'detail'])
 
 Route::get('/search', [Course::class, 'search_by_name'])->name('user.course.search_name');
 
-// Dashboard
+// <=== DASHBOARD ===>
 
 Route::get('/user/{id}/dashboard', [Dashboard::class, 'index'])
     ->name('user.dashboard.index')
     ->middleware(AuthHasLoginedMiddleware::class);
 
-// Authentication
+// <=== END DASHBOARD ===>
+
+// <=== AUTHENTICATION ===> 
+
 Route::group(function () {
     Route::get('/auth/sign-in', [Auth::class, 'index'])->name('user.auth.index');
 
@@ -77,7 +80,10 @@ Route::get('/auth/validate_email_send_again', [Auth::class, 'validating_email_se
 
 Route::get('/auth/sign_out', [Auth::class, 'sign_out'])->name('user.auth.sign_out');
 
-// Enrollment
+// <=== END AUTHENTICATION ===> 
+
+// <=== ENROLLMENT ===> 
+
 Route::group(function () {
     Route::get('/course/{id}/enroll', [Enrollment::class, 'index'])
         ->name('user.enroll.index')
@@ -90,7 +96,9 @@ Route::group(function () {
         ->where('id', '^[0-9]*$');
 })->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class]);
 
-// Learning
+// <=== END ENROLLMENT ===> 
+
+// <=== LEARNING ===> 
 
 Route::get('/learning/{id}/introduction', [LearningCourse::class, 'index'])
     ->name('user.learning.intro')
@@ -147,56 +155,21 @@ Route::post('/learning/{id}/note/{note_id}/editing', [LearningCourse::class, 'ed
     ->where('note_id', '^[0-9]*$')
     ->middleware([AuthHasLoginedMiddleware::class, HasActiveMiddleware::class, HasEnrolledMiddleware::class]);
 
-// Profile
+// <=== END LEARNING ===> 
+
+
+// <=== PROFILE ===> 
+
 Route::get('/user/{id}/profile', [Profile::class, 'index'])
     ->name('user.profile.index')
     ->where('id', '^[0-9]*$')
     ->middleware([AuthHasLoginedMiddleware::class]);
 
+// <=== END PROFILE ===> 
 
-// <=== AUTHOR ===>
 
-Route::get('/author/dashboard', [AuthorHome::class, 'index'])
-    ->name('author.home.index')
-    ->middleware([AuthHasLoginedMiddleware::class]);
 
-Route::get('/author/course', [AuthorCourse::class, 'index'])
-    ->name('author.course.index')
-    ->middleware([AuthHasLoginedMiddleware::class]);
 
-Route::get('/author/course/available', [AuthorCourse::class, 'available'])
-    ->name('author.course.available')
-    ->middleware([AuthHasLoginedMiddleware::class]);
-
-Route::get('/author/course/draft', [AuthorCourse::class, 'draft'])
-    ->name('author.course.draft')
-    ->middleware([AuthHasLoginedMiddleware::class]);
-
-Route::get('/author/course/{course_id}/detail', [AuthorCourse::class, 'detail'])
-    ->name('author.course.detail')
-    ->middleware([AuthHasLoginedMiddleware::class]);
-
-Route::get('/author/course/new-course', [AuthorCourse::class, 'new'])
-    ->name('author.course.new')
-    ->middleware([AuthHasLoginedMiddleware::class]);
-
-Route::post('/author/course/creating', [AuthorCourse::class, 'create'])
-    ->name('author.course.creating')
-    ->middleware([AuthHasLoginedMiddleware::class]);
-
-Route::get('/author/course/{course_id}/edit', [AuthorCourse::class, 'edit'])
-    ->name('author.course.edit')
-    ->middleware([AuthHasLoginedMiddleware::class]);
-
-Route::post('/author/course/{course_id}/editing', [AuthorCourse::class, 'editing'])
-    ->name('author.course.editing')
-    ->middleware([AuthHasLoginedMiddleware::class]);
-
-Route::post('/author/course/{course_id}/deleting', [AuthorCourse::class, 'deleting'])
-    ->name('author.course.deleting')
-    ->middleware([AuthHasLoginedMiddleware::class]);
-
-// <=== END AUTHOR ===>
 
 // Exception
 Route::fallback(function () {

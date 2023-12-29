@@ -35,7 +35,7 @@ class CourseModel extends BaseModel
 
     public function get_course_subject(int $course_id)
     {
-        $subject = $this->db->table('course')->join('subject_course', 'course.course_id = subject_course.course_id')->join('subject', 'subject_course.subject_id = subject.subject_id')->select_field('subject_name')->where('course.course_id', '= ', $course_id)->first();
+        $subject = $this->db->table('course')->join('subject', 'course.course_subject_id = subject.subject_id')->select_field('subject_name')->where('course.course_id', '= ', $course_id)->first();
 
         if (!empty($subject)) {
             return $subject['subject_name'];
@@ -78,7 +78,7 @@ class CourseModel extends BaseModel
      */
     public function get_courses_by_subject(string $subject)
     {
-        $list_id = $this->db->table('course')->join('subject_course', 'course.course_id = subject_course.course_id')->join('subject', 'subject_course.subject_id = subject.subject_id')->select_field('course.course_id')->where('subject.subject_name', '=', $subject)->get();
+        $list_id = $this->db->table('course')->join('subject', 'course.course_subject_id = subject.subject_id')->select_field('course.course_id')->where('subject.subject_name', '=', $subject)->get();
         $courses = [];
         if (!empty($list_id))
             foreach ($list_id as $key => $course) {
@@ -282,8 +282,7 @@ class CourseModel extends BaseModel
     {
         $list_id = $this->db->table('course')->select_field('course_id')->where_like('course_name', '%' . $name . '%')->get();
         $list_id_subject = $this->db->table('course')
-            ->join('subject_course', 'course.course_id = subject_course.course_id')
-            ->join('subject', 'subject_course.subject_id = subject.subject_id')
+            ->join('subject', 'subject.subject_id = course.course_subject_id')
             ->select_field('course.course_id')
             ->where_like('subject.subject_name', '%' . $name . '%')->get();
         $list_id_author = $this->db->table('course')

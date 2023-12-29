@@ -112,14 +112,14 @@ use function app\core\helper\render_block;
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    @php
-    render_block('author/_common/script', $data);
-    @endphp
-
+    
     @php
     render_block($data['script'], $data);
     @endphp
-
+    
+    @php
+    render_block('author/_common/script', $data);
+    @endphp
 
 </body>
 

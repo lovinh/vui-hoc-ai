@@ -1,6 +1,11 @@
 @php
 use function app\core\helper\assets;
 @endphp
-<link rel="stylesheet" href="{{ assets('author/vendor/owl-carousel/css/owl.carousel.min.css') }}">
-<link rel="stylesheet" href="{{ assets('author/vendor/owl-carousel/css/owl.theme.default.min.css') }}">
-<link href="{{ assets('author/vendor/jqvmap/css/jqvmap.min.css') }}" rel="stylesheet">
+<style>
+    .ck-editor__editable_inline {
+        min-height: 300px;
+    }
+    .ck-label {
+        display: none !important;
+    }
+</style>

@@ -6,8 +6,8 @@ use function app\core\helper\str_date;
 use function app\core\helper\str_datetime;
 
 $course = $data['course'];
-$error = $data['error'];
-$message = $data['message'];
+$response = $data['response'];
+
 @endphp
 <div class="content-body" style="min-height: 788px;">
     <div class="container-fluid">
@@ -45,7 +45,7 @@ $message = $data['message'];
                                     <h4 class="text-primary d-inline">Subject:</h4>
                                 </div>
                                 <div class="col text-right">
-                                    <h4>{{ $course['course_subject'] }}</h4>
+                                    <h4>{{ $course['subject_name'] }}</h4>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -61,19 +61,31 @@ $message = $data['message'];
                                     <h4 class="text-primary d-inline">Price:</h4>
                                 </div>
                                 <div class="col text-right">
-                                    <h4>{{ $course['course_price'] == 0 ? "Free" : $course['course_price'] }}</h4>
+                                    <h4>{{ $course['course_price'] == 0 ? "Free" : $course['course_price'] . ' USD' }}</h4>
                                 </div>
                             </div>
                         </div>
                         <div class="row mt-3 pb-2 border-bottom-1 text-center">
-                            <div class="">
-                                <a href="{{ route_url('author.course.edit', ['course_id' => $data['course']['course_id']]) }}" class="btn btn-primary mr-3 ml-5">Edit</a>
+                            <div class="col-lg-4 mt-3" style="padding: 0px 10px;">
+                                <a href="{{ route_url('author.course.edit', ['course_id' => $data['course']['course_id']]) }}" class="btn btn-primary" style="width: 100%;">Edit</a>
                             </div>
-                            <div class="">
-                                <a href="javascript:void()" class="btn btn-dark mr-3">Active</a>
+                            <div class="col-lg-4 mt-3" style="padding: 0px 10px;">
+                                @if (strtolower($course['course_status']) != 'available')
+                                @if (!$course['can_active'])
+                                <span class="btn btn-dark" style="width: 100%; cursor: not-allowed;">Active</span>
+                                @else
+                                <form action="{{ route_url('author.course.active', ['course_id' => $course['course_id']]) }}" method="post">
+                                    <button type="submit" class="btn btn-success" style="width: 100%;">Active</button>
+                                </form>
+                                @endif
+                                @else
+                                <form action="{{ route_url('author.course.deactive', ['course_id' => $course['course_id']]) }}" method="post">
+                                    <button type="submit" class="btn btn-warning" style="width: 100%;">Deactive</button>
+                                </form>
+                                @endif
                             </div>
-                            <div class="">
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#course_delete_model">Delete</button>
+                            <div class="col-lg-4 mt-3" style="padding: 0px 10px;">
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#course_delete_model" style="width: 100%;">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -82,19 +94,6 @@ $message = $data['message'];
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        @if (!empty($error))
-                        <div class="alert alert-danger alert-dismissible alert-alt fade show">
-                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
-                            </button>
-                            <strong>Error!</strong> {{$error}}.
-                        </div>
-                        @elif (!empty($message))
-                        <div class="alert alert-success alert-dismissible alert-alt fade show">
-                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
-                            </button>
-                            <strong>Success!</strong> {{ $message }}.
-                        </div>
-                        @endif
                         <div class="profile-tab">
                             <div class="custom-tab-1">
                                 <ul class="nav nav-tabs">
@@ -119,46 +118,26 @@ $message = $data['message'];
                                     <div id="course_lessons" class="tab-pane fade">
                                         <div class="card-body {{ empty($course['course_lessons']) ? 'text-center' : false }}">
                                             @if (!empty($course['course_lessons']))
-                                            <div id="accordion-nine" class="accordion accordion-active-header">
-                                                @foreach ($course['course_lessons'] as $key => $lesson)
-                                                <div class="accordion__item">
-                                                    <div class="accordion__header collapsed" data-toggle="collapse" data-target="#active-header_collapse{{$key}}" aria-expanded="false">
-                                                        <span class="accordion__header--icon"></span>
-                                                        <span class="accordion__header--text">{{ $lesson['lesson_title'] }}</span>
-                                                        <span class="accordion__header--indicator"></span>
-                                                    </div>
-                                                    <div id="active-header_collapse{{$key}}" class="accordion__body collapse" data-parent="#accordion-nine">
-                                                        <div class="accordion__body--text">
-                                                            <h4 class="mt-3">Description:</h4>
-                                                            {! $lesson['lesson_description'] !}
-                                                            <h4 class="mt-3">Sections:</h4>
-                                                            <div class="basic-list-group mt-3">
-                                                                @if (!empty($course['course_sections'][$lesson['lesson_id']]))
-                                                                <div class="list-group">
-                                                                    @foreach ($course['course_sections'][$lesson['lesson_id']] as $key => $section)
-                                                                    <a href="javascript:void()" class="list-group-item list-group-item-action"> {{ $section['section_name'] }} </a>
-                                                                    @endforeach
-                                                                </div>
-                                                                @else
-                                                                No section
-                                                                @endif
-                                                            </div>
-                                                            <div class="mt-3">
-                                                                <a href="#" class="btn btn-outline-primary pr-5 pl-5">Edit</a>
-                                                                <a href="#" class="btn btn-danger">Delete</a>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
+                                            <div class="basic-list-group">
+                                                <div class="list-group">
+                                                    @foreach ($course['course_lessons'] as $key => $lesson)
+                                                    <a href="{{ route_url('author.course.lesson-detail', ['course_id' => $course['course_id'], 'lesson_id' => $lesson['lesson_id']]) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-3">
+                                                        <span class="d-flex align-items-center">
+                                                            {{ $lesson['lesson_title'] }}
+                                                        </span>
+                                                        <span class="badge badge-primary badge-pill">
+                                                            {{ $course['course_sections'][$lesson['lesson_id']] }}
+                                                        </span>
+                                                    </a>
+                                                    @endforeach
                                                 </div>
-                                                @endforeach
                                             </div>
                                             @else
                                             No lesson found
                                             @endif
                                         </div>
                                         <div class="card-body text-center">
-                                            <a href="#" class="btn btn-primary">Add Lesson</a>
+                                            <a href="{{ route_url('author.course.new_lesson', ['course_id' => $data['course']['course_id']]) }}" class="btn btn-primary">Add Lesson</a>
                                         </div>
                                     </div>
                                     <div id="course_update" class="tab-pane fade">
@@ -172,6 +151,10 @@ $message = $data['message'];
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    @if (empty($course['course_updates']))
+                                                    <tr>
+                                                    </tr>
+                                                    @else
                                                     @foreach ($course['course_updates'] as $index => $update)
                                                     <tr>
                                                         <th>{{ $index + 1 }}</th>
@@ -179,6 +162,7 @@ $message = $data['message'];
                                                         <td>{! $update['course_update_description'] !}</td>
                                                     </tr>
                                                     @endforeach
+                                                    @endif
                                                 </tbody>
                                             </table>
                                         </div>

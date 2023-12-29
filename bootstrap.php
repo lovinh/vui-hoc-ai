@@ -2,6 +2,8 @@
 // Load PHPMailer
 require_once "vendor/autoload.php";
 
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+
 define('_DIR_ROOT', str_replace('\\', '/', __DIR__));
 // Handle http root
 // Get web url protocol

@@ -7,7 +7,7 @@ use function app\core\helper\route_url;
     <div class="quixnav-scroll">
         <ul class="metismenu" id="menu">
             <li class="nav-label first">Dashboard</li>
-            <li><a href="#" aria-expanded="false"><i class="icon icon-single-04"></i><span class="nav-text">Dashboard</span></a>
+            <li><a href="{{ route_url('author.home.index') }}" aria-expanded="false"><i class="icon icon-single-04"></i><span class="nav-text">Dashboard</span></a>
             </li>
             <li class="nav-label">Course</li>
             <li><a class="has-arrow" href="{{ route_url('author.course.index') }}" aria-expanded="false"><i class="icon icon-app-store"></i><span class="nav-text">Course List</span></a>

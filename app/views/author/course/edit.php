@@ -32,20 +32,6 @@ $current = $data['current'];
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        @if (!empty($errors))
-                        <div class="alert alert-danger alert-dismissible fade show">
-                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
-                            </button>
-                            <strong>Error!</strong> Validation failed. Please check again!
-                        </div>
-                        @endif
-                        @if (!empty($error))
-                        <div class="alert alert-danger alert-dismissible fade show">
-                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
-                            </button>
-                            <strong>Error!</strong> Cannot create new course. Please try again!
-                        </div>
-                        @endif
                         <form action="{{ route_url('author.course.editing', ['course_id' => $data['course']['course_id']]) }}" id="step-form-horizontal" class="step-form-horizontal" method="post" enctype="multipart/form-data">
                             <div>
                                 <h4>Course Name</h4>
@@ -78,7 +64,13 @@ $current = $data['current'];
                                         <div class="col-lg-6 mb-4">
                                             <div class="form-group">
                                                 <h4>Course subject</h4>
-                                                <input class="form-control" type="text" name="course_subject" id="course_subject" value="{{ $current['course_subject'] ?? $course['course_subject'] }}">
+                                                <select class="js-example-basic-single" name="course_subject_id">
+                                                    @if (!empty($data['subjects']))
+                                                    @foreach($data['subjects'] as $subject)
+                                                    <option value="{{ $subject['subject_id'] }}" {{ $subject['subject_id'] == $course['course_subject_id'] ? 'selected' : false }}>{{ $subject['subject_name'] }}</option>
+                                                    @endforeach
+                                                    @endif
+                                                </select>
                                                 @if (!empty($errors['course_subject']))
                                                 <label class="text-label" for="course_subject" style="color: red;">{{ $errors['course_subject'] }}</label>
                                                 @endif
@@ -86,7 +78,7 @@ $current = $data['current'];
                                         </div>
                                         <div class="col-lg-6 mb-4">
                                             <h4>Course price</h4>
-                                            <div class="input-group mb-3">
+                                            <div class="input-group">
                                                 <input class="form-control" type="number" name="course_price" id="course_price" value="{{ $current['course_price'] ?? $course['course_price'] }}" required>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">USD</span>
@@ -152,7 +144,8 @@ $current = $data['current'];
                                 <section>
                                     <div class="row">
                                         <div class="col-lg-12 text-right">
-                                            <button type="submit" class="btn btn-primary pl-5 pr-5">Save</button>
+                                            <a href="{{  route_url('author.course.detail', ['course_id' => $course['course_id']]) }}" class="btn btn-outline-primary pl-3 pr-3">Back</a>
+                                            <button type="submit" class="btn btn-success pl-3 pr-3">Save</button>
                                         </div>
                                     </div>
                                 </section>

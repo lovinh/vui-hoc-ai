@@ -81,6 +81,7 @@ class LearningCourse extends BaseController
             'course_name' => $course_name,
             'course_id' => $course_id,
             'description' => $course_model->get_course_description($course_id),
+            'status' => $course_model->get_course_status($course_id),
             'author' => $course_model->get_course_author($course_id),
             'last_update' => $course_model->get_course_last_update_time($course_id),
             'subject' => $course_model->get_course_subject($course_id),

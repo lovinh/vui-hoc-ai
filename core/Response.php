@@ -132,7 +132,6 @@ class Response
     {
         http_response_code($this->__status_code);
         header(implode(";", $this->__header));
-        // echo $this->__content;
         eval("?> " . $this->__content . " <?php");
     }
 }

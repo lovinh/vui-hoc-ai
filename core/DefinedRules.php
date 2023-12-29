@@ -19,12 +19,12 @@ trait DefinedRules
      */
     public function required($message = "")
     {
-        if (isset($this->__fields_data[$this->__field_name])) {
+        if (!empty($this->__fields_data[$this->__field_name]) || $this->__fields_data[$this->__field_name] == 0) {
             return $this;
         }
-        if (!empty($this->__fields_data[$this->__field_name])) {
-            return $this;
-        }
+        // if (isset($this->__fields_data[$this->__field_name])) {
+        //     return $this;
+        // }
         $this->set_error($this->__field_name, __FUNCTION__, $message);
         return $this;
     }

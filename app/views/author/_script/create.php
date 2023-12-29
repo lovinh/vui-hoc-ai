@@ -1,5 +1,6 @@
 @php
 use function app\core\helper\assets;
+use function app\core\helper\url;
 @endphp
 <script src="{{ assets('author/vendor/jquery-steps/build/jquery.steps.min.js') }}"></script>
 <script src="{{ assets('author/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
@@ -8,10 +9,6 @@ use function app\core\helper\assets;
 
 <!-- Form step init -->
 <script src="{{ assets('author/js/plugins-init/jquery-steps-init.js') }}"></script>
-
-<!-- ckeditor -->
-<script src="{{ assets('user/vendors/ckeditor/build/ckeditor.js') }}"></script>
-<script src="{{ assets('author/js/script.js') }}"></script>
 
 
 <script>

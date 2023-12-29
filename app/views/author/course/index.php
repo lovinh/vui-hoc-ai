@@ -4,13 +4,14 @@ use function app\core\helper\route_url;
 use function app\core\helper\public_url;
 use function app\core\helper\str_date;
 $message = $data['message'];
+$courses_title = $data['courses_title'];
 @endphp
 <div class="content-body" style="min-height: 788px;">
     <div class="container-fluid">
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>My Course List</h4>
+                    <h4>{{ $courses_title }}</h4>
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
@@ -21,7 +22,6 @@ $message = $data['message'];
             </div>
         </div>
         <!-- row -->
-
 
         <div class="row">
             <div class="col-lg-12">
@@ -34,7 +34,7 @@ $message = $data['message'];
                             <strong>Success!</strong> {{ $message }}
                         </div>
                         @endif
-                        <h4 class="card-title">All Courses</h4>
+                        <h4 class="card-title">You have total {{ !empty($data['courses']) ? count($data['courses']) : '0' }} courses! Check it now!</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

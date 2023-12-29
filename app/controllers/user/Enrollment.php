@@ -23,26 +23,46 @@ class Enrollment extends BaseController
         /**
          * @var CourseModel
          */
-        $model = load_model('user\CourseModel');
-
-        if ($model->get_course_price($id) == 0) {
-            redirect('user.enroll.payment_status');
+        $course_model = load_model('user\CourseModel');
+        if ($course_model->get_course_price($id) == 0) {
+            /**
+             * @var UserModel
+             */
+            $model = load_model('user\UserModel');
+            /**
+             * @var PaymentModel
+             */
+            $payment_model = load_model('user\PaymentModel');
+            /**
+             * @var MessageModel
+             */
+            $message_model = load_model('user\MessageModel');
+            /**
+             * @var MessageUserModel
+             */
+            $message_user_model = load_model('user\MessageUserModel');
+            $user_id = $model->get_user_id_from_session();
+            $payment_model->add_payment($id, $user_id);
+            $message_model->add_message('user_msg', "Congratulation! You have enrolled " . $course_model->get_course_name($id) . "! Feel free to learn now!", $user_id);
+            $message_id = $message_model->get_last_message_id();
+            $message_user_model->add_message_user($message_id, $user_id);
+            redirect(route_url('user.enroll.payment_status', ['id' => $id]));
             exit;
         }
         $data = [
-            "page-title" => $model->get_course_name($id) . " - Enrollment - Vui Hoc AI",
+            "page-title" => $course_model->get_course_name($id) . " - Enrollment - Vui Hoc AI",
             "view" => 'user/enroll_course_index',
             'page' => 'course',
             "model" => [
                 "id" => $id,
-                "name" => $model->get_course_name($id),
-                "author" => $model->get_course_author($id),
-                "last_update" => $model->get_course_last_update_time($id),
-                "subject" => $model->get_course_subject($id),
-                "author_avt" => $model->get_course_author_avatar($id),
-                "price" => $model->get_course_price($id),
-                "banner" => $model->get_course_banner_uri($id),
-                "thumbnail" => $model->get_course_thumbnail($id),
+                "name" => $course_model->get_course_name($id),
+                "author" => $course_model->get_course_author($id),
+                "last_update" => $course_model->get_course_last_update_time($id),
+                "subject" => $course_model->get_course_subject($id),
+                "author_avt" => $course_model->get_course_author_avatar($id),
+                "price" => $course_model->get_course_price($id),
+                "banner" => $course_model->get_course_banner_uri($id),
+                "thumbnail" => $course_model->get_course_thumbnail($id),
             ]
         ];
         return View::render('layouts/user_layout', $data);
@@ -91,6 +111,7 @@ class Enrollment extends BaseController
             'page' => 'course',
             "model" => [
                 "id" => $id,
+                "user_id" => View::get_data_share('user_id'),
                 "name" => $model->get_course_name($id),
                 "author" => $model->get_course_author($id),
                 "last_update" => $model->get_course_last_update_time($id),

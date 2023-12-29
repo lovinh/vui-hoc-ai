@@ -78,13 +78,85 @@ trait QueryBuilder
         }
         return $this;
     }
-
+    /**
+     * Chỉ định điều kiện của truy vấn có cấu trúc giống như nào. Sử dụng trong các truy vấn SELECT, UPDATE, DELETE. Tuy nhiên sẽ là điều kiện hoặc. Nếu không có điều kiện trước thì phương thức hoạt động như `where_like()`.
+     * @param string $field tên cột (trường) cần chọn. Chỉ được chọn một cột.
+     * @param string $compare toán tử sử dụng để làm điều kiện. Ví dụ: `"="`, `"!="`, `"<"`, `">"`, ...
+     * @param string $value giá trị so sánh.
+     * @return Database trả về chính đối tượng Database được sử dụng. Cho phép các truy vấn tiếp theo được thực hiện.
+     */
     public function or_where_like($field, $pattern)
     {
         if (!empty($this->_where)) {
             $this->_where .= " OR $field LIKE '$pattern'";
         } else {
             $this->_where = " WHERE $field LIKE '$pattern'";
+        }
+        return $this;
+    }
+    /**
+     * Chỉ định điều kiện của truy vấn có nằm giữa khoảng nào. Sử dụng trong các truy vấn SELECT, UPDATE, DELETE. 
+     * @param string $field tên cột (trường) cần chọn. Chỉ được chọn một cột.
+     * @param string $first giá trị bắt đầu. Có thể là số nguyên, chữ hoặc ngày tháng (`Y-m-d`).
+     * @param string $second giá trị kết thúc. Có thể là số nguyên, chữ hoặc ngày tháng (`Y-m-d`).
+     * @return Database trả về chính đối tượng Database được sử dụng. Cho phép các truy vấn tiếp theo được thực hiện.
+     */
+    public function where_between($field, $first, $second)
+    {
+        if (!empty($this->_where)) {
+            $this->_where .= " AND $field BETWEEN '$first' AND '$second'";
+        } else {
+            $this->_where = " WHERE $field BETWEEN '$first' AND '$second'";
+        }
+        return $this;
+    }
+    /**
+     * Chỉ định điều kiện của truy vấn có nằm giữa khoảng nào. Sử dụng trong các truy vấn SELECT, UPDATE, DELETE. Tuy nhiên, điều kiện sẽ được là phép hoặc giữa các điều kiện trước đó và điều kiện mới. Nếu không có điều kiện trước đó phương thức hoạt động tương tự `where_between()`.
+     * @param string $field tên cột (trường) cần chọn. Chỉ được chọn một cột.
+     * @param string $first giá trị bắt đầu. Có thể là số nguyên, chữ hoặc ngày tháng (`Y-m-d`).
+     * @param string $second giá trị kết thúc. Có thể là số nguyên, chữ hoặc ngày tháng (`Y-m-d`).
+     * @return Database trả về chính đối tượng Database được sử dụng. Cho phép các truy vấn tiếp theo được thực hiện.
+     */
+    public function or_where_between($field, $first, $second)
+    {
+        if (!empty($this->_where)) {
+            $this->_where .= " OR $field BETWEEN '$first' AND '$second'";
+        } else {
+            $this->_where = " WHERE $field BETWEEN '$first' AND '$second'";
+        }
+        return $this;
+    }
+
+    /**
+     * Chỉ định điều kiện của truy vấn có thuộc danh sách giá trị được cho hay không. Sử dụng trong các truy vấn SELECT, UPDATE, DELETE. 
+     * @param string $field tên cột (trường) cần chọn. Chỉ được chọn một cột.
+     * @param array $list danh sách giá trị sử dụng trong điều kiện.
+     * @return Database trả về chính đối tượng Database được sử dụng. Cho phép các truy vấn tiếp theo được thực hiện.
+     */
+    public function where_in($field, $list)
+    {
+        $str_list = "('" . implode("', '", $list) . "')";
+        if (!empty($this->_where)) {
+            $this->_where .= " AND $field IN " . $str_list;
+        } else {
+            $this->_where = " WHERE $field IN " . $str_list;
+        }
+        return $this;
+    }
+
+    /**
+     * Chỉ định điều kiện của truy vấn có thuộc danh sách giá trị được cho hay không. Sử dụng trong các truy vấn SELECT, UPDATE, DELETE. Tuy nhiên, điều kiện sẽ được là phép hoặc giữa các điều kiện trước đó và điều kiện mới. Nếu không có điều kiện trước đó phương thức hoạt động tương tự `where_in()`. 
+     * @param string $field tên cột (trường) cần chọn. Chỉ được chọn một cột.
+     * @param array $list danh sách giá trị sử dụng trong điều kiện.
+     * @return Database trả về chính đối tượng Database được sử dụng. Cho phép các truy vấn tiếp theo được thực hiện.
+     */
+    public function or_where_in($field, $list)
+    {
+        $str_list = "('" . implode("', '", $list) . "')";
+        if (!empty($this->_where)) {
+            $this->_where .= " OR $field IN " . $str_list;
+        } else {
+            $this->_where = " WHERE $field IN " . $str_list;
         }
         return $this;
     }
